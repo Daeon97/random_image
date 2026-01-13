@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:random_image/presentation/cubits/random_image_cubit/random_image_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../core/data_sources/remote_data_source.dart';
+import '../../data/data_sources/remote_data_source.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

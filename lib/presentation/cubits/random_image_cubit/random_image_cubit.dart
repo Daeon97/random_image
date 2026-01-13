@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../core/data_sources/remote_data_source.dart';
-import '../../../core/models/image_model.dart';
+import '../../../data/data_sources/remote_data_source.dart';
+import '../../../data/models/image_model.dart';
 
 part 'random_image_state.dart';
 
