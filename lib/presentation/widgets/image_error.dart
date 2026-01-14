@@ -7,7 +7,6 @@ class ImageError extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-    key: key,
     mainAxisAlignment: .center,
     crossAxisAlignment: .center,
     children: [

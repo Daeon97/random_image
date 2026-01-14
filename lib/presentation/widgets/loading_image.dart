@@ -7,7 +7,6 @@ class LoadingImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Stack(
-    key: key,
     alignment: .center,
     children: [
       SizedBox(
