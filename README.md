@@ -10,8 +10,6 @@ complexity. Because of this, certain trade-offs were made, viz:
   are needed using `RepositoryProvider`s and `BlocProvider`s
 - The app does not use any routing libraries. It does not need one since it only has a single
   screen
-- Classes depend on concrete implementations instead of abstractions. Interfaces were not used
-  given the small size of the app
 - The app uses `http` over `dio` for network calls
 - The app does not use `json_annotation`/`json_serializable` for parsing JSON. The API response
   is simple enough to parse manually
@@ -19,7 +17,13 @@ complexity. Because of this, certain trade-offs were made, viz:
 
 ## Video Demo
 
-Video Demo coming soon!
+## Screenshots
+
+<p>
+  <img src="assets/screenshots/android_screenshot_1.png" width="270" />
+  <img src="assets/screenshots/ios_screenshot_1.png" width="270" />
+  <img src="assets/screenshots/ios_screenshot_2.png" width="270" />
+</p>
 
 ## Important To Note
 
@@ -89,7 +93,8 @@ reports like so:
 genhtml coverage/lcov.info -o coverage/html_report
 ```
 
-Then, open the `coverage/html_report/index.html` file in your web browser to view the coverage report
+Then, open the `coverage/html_report/index.html` file in your web browser to view the coverage
+report
 
 ## Getting Started
 
