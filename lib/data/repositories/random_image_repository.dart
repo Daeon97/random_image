@@ -11,7 +11,7 @@ final class ImageFailure {
   final String message;
 }
 
-final class RemoteDataSource {
+final class RandomImageRepository {
   Future<Either<ImageFailure, ImageModel>> getRandomImage() async {
     try {
       final url = Uri.parse(

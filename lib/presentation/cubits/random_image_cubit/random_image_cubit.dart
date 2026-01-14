@@ -1,24 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../../../data/data_sources/remote_data_source.dart';
 import '../../../data/models/image_model.dart';
+import '../../../data/repositories/random_image_repository.dart';
 
 part 'random_image_state.dart';
 
 part 'random_image_cubit.freezed.dart';
 
 class RandomImageCubit extends Cubit<RandomImageState> {
-  RandomImageCubit(RemoteDataSource remoteDataSource)
-    : _remoteDataSource = remoteDataSource,
+  RandomImageCubit(RandomImageRepository randomImageRepository)
+    : _randomImageRepository = randomImageRepository,
       super(const RandomImageState.initial());
 
-  final RemoteDataSource _remoteDataSource;
+  final RandomImageRepository _randomImageRepository;
 
   Future<void> getRandomImage() async {
     emit(const RandomImageState.gettingImage());
 
-    final randomImageRequestResult = await _remoteDataSource.getRandomImage();
+    final randomImageRequestResult = await _randomImageRepository
+        .getRandomImage();
 
     randomImageRequestResult.fold(
       (imageFailure) => emit(
