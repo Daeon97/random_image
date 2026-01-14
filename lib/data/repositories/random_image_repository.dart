@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
@@ -13,12 +14,14 @@ final class ImageFailure {
 
 final class RandomImageRepository {
   Future<Either<ImageFailure, ImageModel>> getRandomImage() async {
+    final client = http.Client();
+
     try {
       final url = Uri.parse(
         'https://november7-730026606190.europe-west1.run.app/image',
       );
 
-      final response = await http.get(url);
+      final response = await client.get(url).timeout(Duration(seconds: 20));
 
       final responseBody = response.body;
       final decodedResponseBody = json.decode(responseBody);
@@ -31,6 +34,8 @@ final class RandomImageRepository {
       final stackTrace = s.toString();
 
       return left(ImageFailure('$errorMessage\n$stackTrace'));
+    } finally {
+      client.close();
     }
   }
 }
