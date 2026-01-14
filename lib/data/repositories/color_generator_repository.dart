@@ -6,7 +6,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-final class ColorGeneratorRepository {
+abstract class ColorGeneratorRepository {
+  Future<Color?> generateDominantColorFrom(
+    BuildContext context, {
+    required ImageProvider<Object> image,
+  });
+}
+
+final class ColorGeneratorRepositoryImpl implements ColorGeneratorRepository {
+  @override
   Future<Color?> generateDominantColorFrom(
     BuildContext context, {
     required ImageProvider<Object> image,

@@ -12,16 +12,23 @@ final class ImageFailure {
   final String message;
 }
 
-final class RandomImageRepository {
-  Future<Either<ImageFailure, ImageModel>> getRandomImage() async {
-    final client = http.Client();
+abstract class RandomImageRepository {
+  Future<Either<ImageFailure, ImageModel>> getRandomImage();
+}
 
+final class RandomImageRepositoryImpl implements RandomImageRepository {
+  RandomImageRepositoryImpl(http.Client client) : _client = client;
+
+  final http.Client _client;
+
+  @override
+  Future<Either<ImageFailure, ImageModel>> getRandomImage() async {
     try {
       final url = Uri.parse(
         'https://november7-730026606190.europe-west1.run.app/image',
       );
 
-      final response = await client.get(url).timeout(Duration(seconds: 20));
+      final response = await _client.get(url).timeout(Duration(seconds: 20));
 
       final responseBody = response.body;
       final decodedResponseBody = json.decode(responseBody);
@@ -34,8 +41,6 @@ final class RandomImageRepository {
       final stackTrace = s.toString();
 
       return left(ImageFailure('$errorMessage\n$stackTrace'));
-    } finally {
-      client.close();
     }
   }
 }

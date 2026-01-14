@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:random_image/presentation/cubits/random_image_cubit/random_image_cubit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -15,8 +16,16 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MultiRepositoryProvider(
     providers: [
-      RepositoryProvider(create: (_) => RandomImageRepository()),
-      RepositoryProvider(create: (_) => ColorGeneratorRepository()),
+      RepositoryProvider(
+        create: (_) => http.Client(),
+        dispose: (client) => client.close(),
+      ),
+      RepositoryProvider<RandomImageRepository>(
+        create: (rPCtx) => RandomImageRepositoryImpl(rPCtx.read<http.Client>()),
+      ),
+      RepositoryProvider<ColorGeneratorRepository>(
+        create: (_) => ColorGeneratorRepositoryImpl(),
+      ),
     ],
     child: MultiBlocProvider(
       providers: [
