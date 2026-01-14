@@ -45,11 +45,11 @@ dominant color detection
 The project follows a simplified version of Clean Architecture. Data flows from the data layer
 to the presentation layer. Each layer has a specific responsibility, ensuring separation of
 concerns and maintainability:
+
 - **Data Layer**: Responsible for fetching data from the API and processing it. It includes
   models to represent the data and repositories to handle business logic and data manipulation
 - **Presentation Layer**: Manages the user interface and state management. It includes screens
   for displaying the UI, widgets for reusable components, and cubits for managing state
-
 
 The project is structured as follows:
 
@@ -66,11 +66,37 @@ The project is structured as follows:
 ```
 
 ## Testing
-Testing coming soon!
+
+The project includes some unit tests for the cubit and repository layers. You can find the test
+files in the `test/` directory, mirroring the structure of the `lib/` directory. Test coverage is
+currently at 51.6%. To run the tests, use the following command:
+
+```bash
+flutter test
+```
+
+You can also generate a coverage report using:
+
+```bash
+flutter test --coverage
+```
+
+This command will create a `coverage/lcov.info` file that you can use with coverage tools to
+visualize the coverage data. For example, using the `lcov` tool, you can generate HTML coverage
+reports like so:
+
+```bash
+genhtml coverage/lcov.info -o coverage/html_report
+```
+
+Then, open the `coverage/html_report/index.html` file in your web browser to view the coverage report
 
 ## Getting Started
+
 To run the project locally, follow these steps:
-1. Ensure you have Flutter installed. You can follow the instructions [here](https://flutter.dev/docs/get-started/install)
+
+1. Ensure you have Flutter installed. You can follow the
+   instructions [here](https://flutter.dev/docs/get-started/install)
 2. Clone this repository:
    ```bash
    git clone
