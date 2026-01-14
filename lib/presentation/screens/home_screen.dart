@@ -98,66 +98,83 @@ class _HomeScreenViewState extends State<HomeScreenView> {
               mainAxisAlignment: .center,
               crossAxisAlignment: .center,
               children: [
-                SizedBox(
-                  height: _computeDesiredImageSizeFrom(context),
-                  width: _computeDesiredImageSizeFrom(context),
-                  child: Card(
-                    elevation: 4,
-                    color: _dominantColor,
-                    shape: RoundedRectangleBorder(),
-                    child: BlocBuilder<RandomImageCubit, RandomImageState>(
-                      builder: (_, randomImageState) => AnimatedSwitcher(
-                        duration: .new(milliseconds: 600),
-                        switchInCurve: Curves.easeIn,
-                        switchOutCurve: Curves.easeOut,
-                        child: randomImageState.maybeWhen(
-                          gotImage: (image) => Center(
-                            child: CachedNetworkImage(
-                              width: _computeDesiredImageSizeFrom(context),
-                              height: _computeDesiredImageSizeFrom(context),
-                              fit: .cover,
-                              imageUrl: image.url,
-                              fadeInDuration: .new(milliseconds: 700),
-                              fadeInCurve: Curves.easeIn,
-                              fadeOutDuration: .new(milliseconds: 1200),
-                              fadeOutCurve: Curves.easeOut,
-                              memCacheWidth: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              memCacheHeight: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              maxWidthDiskCache: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              maxHeightDiskCache: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              errorWidget: (_, _, error) =>
-                                  ImageError(error: error),
-                              progressIndicatorBuilder:
-                                  (_, _, downloadProgress) => LoadingImage(
-                                    progress: downloadProgress.progress,
-                                  ),
+                Semantics(
+                  container: true,
+                  label: 'Image display area',
+                  child: SizedBox(
+                    height: _computeDesiredImageSizeFrom(context),
+                    width: _computeDesiredImageSizeFrom(context),
+                    child: Card(
+                      elevation: 4,
+                      color: _dominantColor,
+                      shape: RoundedRectangleBorder(),
+                      child: BlocBuilder<RandomImageCubit, RandomImageState>(
+                        builder: (_, randomImageState) => AnimatedSwitcher(
+                          duration: .new(milliseconds: 600),
+                          switchInCurve: Curves.easeIn,
+                          switchOutCurve: Curves.easeOut,
+                          child: randomImageState.maybeWhen(
+                            gotImage: (image) => Semantics(
+                              key: ValueKey(image.url),
+                              label: 'Random image',
+                              image: true,
+                              child: CachedNetworkImage(
+                                width: _computeDesiredImageSizeFrom(context),
+                                height: _computeDesiredImageSizeFrom(context),
+                                fit: .cover,
+                                imageUrl: image.url,
+                                fadeInDuration: .new(milliseconds: 700),
+                                fadeInCurve: Curves.easeIn,
+                                fadeOutDuration: .new(milliseconds: 1200),
+                                fadeOutCurve: Curves.easeOut,
+                                memCacheWidth: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                memCacheHeight: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                maxWidthDiskCache: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                maxHeightDiskCache:
+                                    _computeDesiredImageSizeFrom(
+                                      context,
+                                      considerDevicePixelRatio: true,
+                                    ).toInt(),
+                                errorWidget: (_, _, error) =>
+                                    ImageError(error: error),
+                                progressIndicatorBuilder:
+                                    (_, _, downloadProgress) => LoadingImage(
+                                      progress: downloadProgress.progress,
+                                    ),
+                              ),
                             ),
+                            failedToGetImage: (message) => ImageError(
+                              key: ValueKey('error_$message'),
+                              error: 'Failed to get image. $message',
+                            ),
+                            orElse: () =>
+                                const LoadingImage(key: ValueKey('loading')),
                           ),
-                          failedToGetImage: (message) => ImageError(
-                            error: 'Failed to get image. $message',
-                          ),
-                          orElse: () => const LoadingImage(),
                         ),
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _getRandomImage,
-                  child: const Text('Another'),
+                Semantics(
+                  button: true,
+                  label: 'Load another random image',
+                  child: Tooltip(
+                    message: 'Load another random image',
+                    child: ElevatedButton(
+                      onPressed: _getRandomImage,
+                      child: const Text('Another'),
+                    ),
+                  ),
                 ),
               ],
             ),

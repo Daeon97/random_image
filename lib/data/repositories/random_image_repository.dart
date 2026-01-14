@@ -12,7 +12,7 @@ final class ImageFailure {
   final String message;
 }
 
-abstract class RandomImageRepository {
+abstract interface class RandomImageRepository {
   Future<Either<ImageFailure, ImageModel>> getRandomImage();
 }
 

@@ -6,19 +6,30 @@ class ImageError extends StatelessWidget {
   final dynamic error;
 
   @override
-  Widget build(BuildContext context) => Column(
-    mainAxisAlignment: .center,
-    crossAxisAlignment: .center,
-    children: [
-      const Icon(Icons.error, size: 50, color: Colors.redAccent),
-      const SizedBox(height: 10),
-      Text(
-        error.toString(),
-        textAlign: .center,
-        maxLines: 10,
-        overflow: .ellipsis,
-        style: TextStyle(fontSize: 16),
+  Widget build(BuildContext context) => Semantics(
+    label: 'Error loading image',
+    hint: error.toString(),
+    child: ExcludeSemantics(
+      child: Column(
+        mainAxisAlignment: .center,
+        crossAxisAlignment: .center,
+        children: [
+          const Icon(
+            Icons.error,
+            size: 50,
+            color: Colors.redAccent,
+            semanticLabel: 'Error icon',
+          ),
+          const SizedBox(height: 10),
+          Text(
+            error.toString(),
+            textAlign: .center,
+            maxLines: 10,
+            overflow: .ellipsis,
+            style: TextStyle(fontSize: 16),
+          ),
+        ],
       ),
-    ],
+    ),
   );
 }
