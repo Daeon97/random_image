@@ -73,69 +73,72 @@ class _HomeScreenViewState extends State<HomeScreenView> {
       );
     },
     child: Scaffold(
-      backgroundColor: context.watch<DominantColorCubit>().state.whenOrNull(
-        generatedColor: (dominantColor) => dominantColor,
-      ),
+      backgroundColor: _dominantColor,
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisSize: .min,
-            mainAxisAlignment: .center,
-            crossAxisAlignment: .center,
-            children: [
-              SizedBox(
-                height: _computeDesiredImageSizeFrom(context),
-                width: _computeDesiredImageSizeFrom(context),
-                child: Card(
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(),
-                  child: BlocBuilder<RandomImageCubit, RandomImageState>(
-                    builder: (_, randomImageState) =>
-                        randomImageState.maybeWhen(
-                          gotImage: (image) => Center(
-                            child: CachedNetworkImage(
-                              width: _computeDesiredImageSizeFrom(context),
-                              height: _computeDesiredImageSizeFrom(context),
-                              fit: .cover,
-                              imageUrl: image.url,
-                              memCacheWidth: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              memCacheHeight: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              maxWidthDiskCache: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              maxHeightDiskCache: _computeDesiredImageSizeFrom(
-                                context,
-                                considerDevicePixelRatio: true,
-                              ).toInt(),
-                              errorWidget: (_, _, error) =>
-                                  ImageError(error: error),
-                              progressIndicatorBuilder:
-                                  (_, _, downloadProgress) => LoadingImage(
-                                    progress: downloadProgress.progress,
-                                  ),
+          child: SingleChildScrollView(
+            padding: EdgeInsetsDirectional.symmetric(vertical: 24),
+            child: Column(
+              mainAxisSize: .min,
+              mainAxisAlignment: .center,
+              crossAxisAlignment: .center,
+              children: [
+                SizedBox(
+                  height: _computeDesiredImageSizeFrom(context),
+                  width: _computeDesiredImageSizeFrom(context),
+                  child: Card(
+                    elevation: 4,
+                    color: _dominantColor,
+                    shape: RoundedRectangleBorder(),
+                    child: BlocBuilder<RandomImageCubit, RandomImageState>(
+                      builder: (_, randomImageState) =>
+                          randomImageState.maybeWhen(
+                            gotImage: (image) => Center(
+                              child: CachedNetworkImage(
+                                width: _computeDesiredImageSizeFrom(context),
+                                height: _computeDesiredImageSizeFrom(context),
+                                fit: .cover,
+                                imageUrl: image.url,
+                                memCacheWidth: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                memCacheHeight: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                maxWidthDiskCache: _computeDesiredImageSizeFrom(
+                                  context,
+                                  considerDevicePixelRatio: true,
+                                ).toInt(),
+                                maxHeightDiskCache:
+                                    _computeDesiredImageSizeFrom(
+                                      context,
+                                      considerDevicePixelRatio: true,
+                                    ).toInt(),
+                                errorWidget: (_, _, error) =>
+                                    ImageError(error: error),
+                                progressIndicatorBuilder:
+                                    (_, _, downloadProgress) => LoadingImage(
+                                      progress: downloadProgress.progress,
+                                    ),
+                              ),
                             ),
+                            failedToGetImage: (message) => ImageError(
+                              error: 'Failed to get image. $message',
+                            ),
+                            orElse: () => const LoadingImage(),
                           ),
-                          failedToGetImage: (message) => ImageError(
-                            error: 'Failed to get image. $message',
-                          ),
-                          orElse: () => const LoadingImage(),
-                        ),
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _getRandomImage,
-                child: const Text('Another'),
-              ),
-            ],
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: _getRandomImage,
+                  child: const Text('Another'),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -147,11 +150,22 @@ class _HomeScreenViewState extends State<HomeScreenView> {
   double _computeDesiredImageSizeFrom(
     BuildContext context, {
     bool considerDevicePixelRatio = false,
-  }) => switch (considerDevicePixelRatio) {
-    true =>
-      MediaQuery.sizeOf(context).width /
-          1.2 *
-          MediaQuery.devicePixelRatioOf(context),
-    false => MediaQuery.sizeOf(context).width / 1.2,
-  };
+  }) {
+    final orientation = MediaQuery.orientationOf(context);
+
+    final size = switch (orientation) {
+      Orientation.portrait => MediaQuery.sizeOf(context).width,
+      Orientation.landscape => MediaQuery.sizeOf(context).height,
+    };
+
+    return switch (considerDevicePixelRatio) {
+      true => size / 1.2 * MediaQuery.devicePixelRatioOf(context),
+      false => size / 1.2,
+    };
+  }
+
+  Color? get _dominantColor => context
+      .watch<DominantColorCubit>()
+      .state
+      .whenOrNull(generatedColor: (dominantColor) => dominantColor);
 }
