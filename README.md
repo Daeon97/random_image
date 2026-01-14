@@ -17,6 +17,14 @@ complexity. Because of this, certain trade-offs were made, viz:
 
 ## Video Demo
 
+###### Android
+
+https://github.com/user-attachments/assets/6a0ac6c1-d99b-42f5-9775-333b2ae8845c
+
+###### iOS
+
+https://github.com/user-attachments/assets/3b173c46-6f3f-4d43-92f7-0047ede5f4d2
+
 ## Screenshots
 
 <p>
